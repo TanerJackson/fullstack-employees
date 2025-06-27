@@ -1,6 +1,12 @@
+import client from "../client.js";
 /** @returns the employee created according to the provided details */
 export async function createEmployee({ name, birthday, salary }) {
   // TODO
+  const text =
+    "INSERT INTO employees(name, birthday, salary) VALUES($1, $2, $3) RETURNING *";
+  const values = [name, birthday, salary];
+  const res = await client.query(text, values);
+  return res;
 }
 
 // === Part 2 ===
