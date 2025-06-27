@@ -14,6 +14,8 @@ export async function createEmployee({ name, birthday, salary }) {
 /** @returns all employees */
 export async function getEmployees() {
   // TODO
+  const result = await client.query("SELECT * FROM employees");
+  return result;
 }
 
 /**
@@ -22,6 +24,15 @@ export async function getEmployees() {
  */
 export async function getEmployee(id) {
   // TODO
+  try {
+    const result = await db.query("SELECT * FROM employees WHERE id = $1", [
+      id,
+    ]);
+    return result;
+  } catch (error) {
+    console.error("undefined");
+    throw error;
+  }
 }
 
 /**
@@ -30,6 +41,22 @@ export async function getEmployee(id) {
  */
 export async function updateEmployee({ id, name, birthday, salary }) {
   // TODO
+  try {
+    const result = await db.query(
+      `
+      UPDATE employees
+      SET name = $2,
+          birthdate = $3,
+          salary = $4
+      WHERE id = $1
+      RETURNING *;
+      `
+    );
+    return result;
+  } catch (error) {
+    console.error("undefined");
+    throw error;
+  }
 }
 
 /**
@@ -38,4 +65,19 @@ export async function updateEmployee({ id, name, birthday, salary }) {
  */
 export async function deleteEmployee(id) {
   // TODO
+  try {
+    const result = await db.query(
+      `
+      DELETE FROM employees
+      WHERE id = $1
+      RETURNING *;
+      `,
+      [id]
+    );
+
+    return result;
+  } catch (error) {
+    console.error("undefined");
+    throw error;
+  }
 }
